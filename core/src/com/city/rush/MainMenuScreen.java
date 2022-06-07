@@ -7,15 +7,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 
-
-public class MainMenuScreen extends Game implements Screen{
+public class MainMenuScreen implements Screen{
     final CityRush mainMenu;
     private int mainMenuSelected = 0;
     private final int maxMainMenu=4;
 
-    public MainMenuScreen(CityRush cityRush) {
+    public MainMenuScreen(final CityRush cityRush) {
         this.mainMenu = cityRush;
         mainMenu.generator = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/Peinture Fraiche.ttf"));
         mainMenu.parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -37,6 +37,7 @@ public class MainMenuScreen extends Game implements Screen{
 
     @Override
     public void render(float delta) {
+        ScreenUtils.clear(0,0,0,0);
         mainMenu.batch.begin();
         mainMenu.batch.draw(mainMenu.mainMenuBg, 0, -50, 1440, 750);
         mainMenu.fontArray[0].draw(mainMenu.batch, "New Game", 960, 550);
@@ -52,6 +53,11 @@ public class MainMenuScreen extends Game implements Screen{
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER))
         {
+            if(mainMenuSelected==0)
+            {
+                mainMenu.setScreen(new GameScreen(mainMenu));
+                dispose();
+            }
             if(mainMenuSelected==4)
             {
                 System.exit(0);
@@ -79,11 +85,6 @@ public class MainMenuScreen extends Game implements Screen{
             mainMenu.parameter.color=Color.FIREBRICK;
             mainMenu.fontArray[mainMenuSelected]=mainMenu.generator.generateFont(mainMenu.parameter);
         }
-    }
-
-    @Override
-    public void create() {
-
     }
 
     @Override

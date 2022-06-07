@@ -20,7 +20,6 @@ public class CityRush extends Game  {
 	public void create () {
 		batch = new SpriteBatch();
 		mainMenuBg = new Texture("Images/mainMenu.png");
-        button=new Texture("Images/button.png");
 		menu1=new BitmapFont();
 		menu2=new BitmapFont();
 		menu3=new BitmapFont();

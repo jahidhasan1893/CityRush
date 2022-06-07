@@ -1,0 +1,33 @@
+runner.png
+size: 373, 186
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+10
+  rotate: false
+  xy: 0, 0
+  size: 100, 184
+  orig: 100, 184
+  offset: 0, 0
+  index: -1
+11
+  rotate: false
+  xy: 100, 0
+  size: 89, 186
+  orig: 89, 186
+  offset: 0, 0
+  index: -1
+12
+  rotate: false
+  xy: 189, 0
+  size: 89, 184
+  orig: 89, 184
+  offset: 0, 0
+  index: -1
+13
+  rotate: false
+  xy: 278, 0
+  size: 95, 164
+  orig: 95, 164
+  offset: 0, 0
+  index: -1
