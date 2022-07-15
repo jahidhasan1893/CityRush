@@ -55,8 +55,16 @@ public class MainMenuScreen implements Screen{
         {
             if(mainMenuSelected==0)
             {
+                //dispose();
                 mainMenu.setScreen(new GameScreen(mainMenu));
-                dispose();
+            }
+            if(mainMenuSelected==1)
+            {
+                mainMenu.setScreen(new HighScoreScreen(mainMenu));
+            }
+            if(mainMenuSelected==3)
+            {
+                mainMenu.setScreen(new AboutUsScreen(mainMenu));
             }
             if(mainMenuSelected==4)
             {
@@ -109,6 +117,7 @@ public class MainMenuScreen implements Screen{
 
     @Override
     public void dispose() {
+
     }
 
 }
