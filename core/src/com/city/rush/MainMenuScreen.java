@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -14,10 +15,12 @@ public class MainMenuScreen implements Screen{
     final CityRush mainMenu;
     private int mainMenuSelected = 0;
     private final int maxMainMenu=4;
+    Sound music;
     long id;
 
     public MainMenuScreen(final CityRush cityRush) {
         this.mainMenu = cityRush;
+        music= Gdx.audio.newSound(Gdx.files.internal("music/peritune-spook4.ogg"));
         mainMenu.generator = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/Peinture Fraiche.ttf"));
         mainMenu.parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         mainMenu.parameter.color = Color.WHITE;
@@ -39,6 +42,8 @@ public class MainMenuScreen implements Screen{
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0,0,0,0);
+        //id=music.play(0.5f);
+        //music.setLooping(id,true);
         mainMenu.batch.begin();
         mainMenu.batch.draw(mainMenu.mainMenuBg, 0, -50, 1440, 750);
         mainMenu.fontArray[0].draw(mainMenu.batch, "New Game", 960, 550);
@@ -122,7 +127,7 @@ public class MainMenuScreen implements Screen{
 
     @Override
     public void dispose() {
-
+        music.dispose();
     }
 
 }
