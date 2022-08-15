@@ -14,6 +14,7 @@ public class MainMenuScreen implements Screen{
     final CityRush mainMenu;
     private int mainMenuSelected = 0;
     private final int maxMainMenu=4;
+    long id;
 
     public MainMenuScreen(final CityRush cityRush) {
         this.mainMenu = cityRush;
@@ -61,6 +62,10 @@ public class MainMenuScreen implements Screen{
             if(mainMenuSelected==1)
             {
                 mainMenu.setScreen(new HighScoreScreen(mainMenu));
+            }
+            if(mainMenuSelected==2)
+            {
+                mainMenu.setScreen(new ControlScreen(mainMenu));
             }
             if(mainMenuSelected==3)
             {

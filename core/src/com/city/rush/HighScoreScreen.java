@@ -14,9 +14,10 @@ public class HighScoreScreen implements Screen {
     SpriteBatch batch;
     Texture texture;
     private float timePassed=0;
-    BitmapFont font;
-    FreeTypeFontGenerator generator;
-    FreeTypeFontGenerator.FreeTypeFontParameter parameter;
+    BitmapFont font,font2,font3;
+    String str;
+    FreeTypeFontGenerator generator,generator2;
+    FreeTypeFontGenerator.FreeTypeFontParameter parameter,parameter2;
     public HighScoreScreen(CityRush cityRush) {
         this.highScore=cityRush;
         batch=new SpriteBatch();
@@ -26,6 +27,11 @@ public class HighScoreScreen implements Screen {
         parameter.size=30;
         parameter.color= Color.BLACK;
         font=generator.generateFont(parameter);
+        generator2=new FreeTypeFontGenerator(Gdx.files.internal("Fonts/Prototype.ttf"));
+        parameter2=new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter2.size=80;
+        parameter2.color=Color.WHITE;
+        font2 = generator2.generateFont(parameter2);
     }
 
     @Override
@@ -38,6 +44,9 @@ public class HighScoreScreen implements Screen {
         batch.begin();
         timePassed+=Gdx.graphics.getDeltaTime();
         batch.draw(texture,-30, 30, 1700, 750);
+        str="Highscore: "+highScore.high_score;
+        //System.out.println(str);
+        font2.draw(batch,str,490,400);
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
         {
             highScore.setScreen(new MainMenuScreen(highScore));
@@ -76,5 +85,7 @@ public class HighScoreScreen implements Screen {
         batch.dispose();
         texture.dispose();
         font.dispose();
+        font2.dispose();
+        font3.dispose();
     }
 }
