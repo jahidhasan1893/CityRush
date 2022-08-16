@@ -3,6 +3,7 @@ package com.city.rush;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -18,7 +19,7 @@ public class CityRush extends Game  {
 	BitmapFont[] fontArray;
 	FreeTypeFontGenerator generator;
 	FreeTypeFontGenerator.FreeTypeFontParameter parameter;
-
+	Music music;
 	Preferences pref;
 	public int high_score=0;
 
@@ -31,7 +32,7 @@ public class CityRush extends Game  {
 		menu3=new BitmapFont();
 		menu4=new BitmapFont();
 		menu5=new BitmapFont();
-
+		music= Gdx.audio.newMusic(Gdx.files.internal("music/peritune-spook4.ogg"));
 		fontArray=new BitmapFont[]{menu1,menu2,menu3,menu4,menu5};
 		this.setScreen(new MainMenuScreen(this));
 	}
@@ -41,7 +42,8 @@ public class CityRush extends Game  {
 
 		super.render();
 
-		//music.setVolume(id,0.5f);
+		music.play();
+		music.setLooping(true);
 	}
 
 	@Override
@@ -54,6 +56,6 @@ public class CityRush extends Game  {
 		menu4.dispose();
 		menu5.dispose();
 		generator.dispose();
-
+		music.dispose();
 	}
 }

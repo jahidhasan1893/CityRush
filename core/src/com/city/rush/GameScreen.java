@@ -17,7 +17,7 @@ public class GameScreen implements Screen {
     final CityRush gameScreen;
     SpriteBatch batch;
     OrthographicCamera camera;
-    Texture bg1, bg2, bg3, bomb, game_over;
+    Texture bg1, bg2, bg3, bomb, game_over,drone;
     Texture[] backgrounds;
     private TextureAtlas runAtlas, jumpAtlas, punchAtlas, jombieAtlas;
     private Animation runAnimation, jumpAnimation, punchAnimation, jombieAnimation;
@@ -29,14 +29,16 @@ public class GameScreen implements Screen {
     private float cur_pos = 720;
     private float jombie_pos;
     private float bomb_pos;
+    private float drone_pos;
     private float timePassed = 0;
     private float jump_timer = 0.9f;
     private boolean jump_chk = false;
     private int point = 0;
-    private int x = 1;
+    private int x = 1,y=1;
     private String str;
     private Rectangle bomb_i;
     private Rectangle player_i;
+    private Rectangle drone_i;
     boolean is_game_over = false;
 
 
@@ -46,10 +48,16 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, 1440, 700);
         bomb_i = new Rectangle();
         player_i = new Rectangle();
+        drone_i=new Rectangle();
         bomb_i.height = 11;
         bomb_i.width = 1;
         player_i.width = 150;
-        player_i.height = 76;
+        player_i.height = 120;
+        player_i.y=100;
+        bomb_i.y=0;
+        drone_i.height=100;
+        drone_i.width=10;
+
         runAtlas = new TextureAtlas(Gdx.files.internal("Animation1/run.txt"));
         runAnimation = new Animation(1 / 15f, runAtlas.getRegions());
         jumpAtlas = new TextureAtlas(Gdx.files.internal("Animation2/jump.txt"));
@@ -77,6 +85,7 @@ public class GameScreen implements Screen {
         bg2 = new Texture("Images/bg2.png");
         bg3 = new Texture("Images/bg3.png");
         bomb = new Texture(Gdx.files.internal("Images/bomb.png"));
+        drone=new Texture(Gdx.files.internal("Images/drone.png"));
         game_over = new Texture(Gdx.files.internal("Images/game_over.png"));
         backgrounds = new Texture[]{bg1, bg3, bg2};
         gameScreen.pref=Gdx.app.getPreferences("game preferences");
@@ -104,29 +113,48 @@ public class GameScreen implements Screen {
             score.draw(batch, str, cur_pos + 550, 650);
             //System.out.println(timePassed);
             if (timePassed > 3 * x && timePassed < 3 * x + 0.1) {
-                bomb_pos = cur_pos + 500;
+                bomb_pos = cur_pos + 450;
                 x++;
             }
-            if (timePassed > 5 * x && timePassed < 5 * x + 0.1) {
-                jombie_pos = cur_pos + 450;
+            /*if (timePassed > 5 * x && timePassed < 5 * x + 0.1) {
+                drone_pos = cur_pos + 500;
                 x++;
+            }*/
+            if (timePassed > 5 * y && timePassed < 5 * y + 0.1) {
+                drone_pos = cur_pos + 400;
+                y++;
             }
-            jombie_pos--;
-            // batch.draw((TextureRegion) jombieAnimation.getKeyFrame(timePassed,true),jombie_pos,position_y);
+
+            //jombie_pos--;
+            // batch.draw((TextureRegion) jombieAnimation.getKeyFrame(timePassed,true),jombi
+            // e_pos,position_y);
             batch.draw(bomb, bomb_pos, position_y + 85, 60, 30);
-            bomb_i.x = (int) bomb_pos;
-            bomb_i.y = (int) position_y + 85;
-            player_i.x = (int) cur_pos - 550;
-            player_i.y = (int) position_y + 95;
-            if (player_i.intersects(bomb_i) && player_i.y - bomb_i.y <= 10 && player_i.x - bomb_i.x >= -7) {
+            batch.draw(drone,drone_pos,position_y+85+170,120,50);
+            //System.out.println(drone_i.y-player_i.y);
+            if (player_i.intersects(bomb_i)) {
             /*System.out.println(player_i.x-bomb_i.x);
             System.out.println("Finished!!");*/
                 is_game_over = true;
+                //System.out.println("Finished!!!");
+                //System.out.println(player_i.y - bomb_i.y);
+            }
+            if (player_i.intersects(drone_i)) {
+            /*System.out.println(player_i.x-bomb_i.x);
+            System.out.println("Finished!!");*/
+                is_game_over = true;
+                //System.out.println("Finished!!!");
+                //System.out.println(player_i.y - bomb_i.y);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 point += 1;
                 cur_pos = position_x + timePassed * 350;
-                batch.draw((TextureRegion) jumpAnimation.getKeyFrame(timePassed, true), cur_pos - 550, position_y);
+                batch.draw((TextureRegion) jumpAnimation.getKeyFrame(timePassed, true), cur_pos - 550, position_y+50);
+                bomb_i.x = (int) bomb_pos;
+                bomb_i.y = (int) position_y + 85;
+                player_i.x = (int) cur_pos - 550;
+                player_i.y = (int) position_y + 95+50;
+                drone_i.x=(int)drone_pos;
+                drone_i.y=(int)position_y+85+170;
                 jumpAnimation.setFrameDuration(0.1f);
             } else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
                 jombie_pos++;
@@ -135,7 +163,12 @@ public class GameScreen implements Screen {
                 point += 1;
                 cur_pos = position_x + timePassed * 350;
                 batch.draw((TextureRegion) runAnimation.getKeyFrame(timePassed, true), cur_pos - 550, position_y);
-
+                bomb_i.x = (int) bomb_pos;
+                bomb_i.y = (int) position_y + 85;
+                player_i.x = (int) cur_pos - 550;
+                player_i.y = (int) position_y + 95;
+                drone_i.x=(int)drone_pos;
+                drone_i.y=(int)position_y+85+170;
             }
         }
         else
@@ -192,5 +225,6 @@ public class GameScreen implements Screen {
         freeTypeFontGenerator.dispose();
         font.dispose();
         bomb.dispose();
+        drone.dispose();
     }
 }
