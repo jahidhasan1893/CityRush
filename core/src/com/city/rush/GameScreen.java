@@ -17,7 +17,7 @@ public class GameScreen implements Screen {
     final CityRush gameScreen;
     SpriteBatch batch;
     OrthographicCamera camera;
-    Texture bg1, bg2, bg3, bomb, game_over,drone;
+    Texture bg1, bg2, bg3, bomb, game_over,drone,bubble;
     Texture[] backgrounds;
     private TextureAtlas runAtlas, jumpAtlas, punchAtlas, jombieAtlas;
     private Animation runAnimation, jumpAnimation, punchAnimation, jombieAnimation;
@@ -31,6 +31,7 @@ public class GameScreen implements Screen {
     private float bomb_pos;
     private float drone_pos;
     private float timePassed = 0;
+    private float bubble_time=0;
     private float jump_timer = 0.9f;
     private boolean jump_chk = false;
     private int point = 0;
@@ -40,6 +41,8 @@ public class GameScreen implements Screen {
     private Rectangle player_i;
     private Rectangle drone_i;
     boolean is_game_over = false;
+    boolean bubble_activated=false;
+    float bubble_pos_y;
 
 
     public GameScreen(CityRush cityRush) {
@@ -57,7 +60,6 @@ public class GameScreen implements Screen {
         bomb_i.y=0;
         drone_i.height=100;
         drone_i.width=10;
-
         runAtlas = new TextureAtlas(Gdx.files.internal("Animation1/run.txt"));
         runAnimation = new Animation(1 / 15f, runAtlas.getRegions());
         jumpAtlas = new TextureAtlas(Gdx.files.internal("Animation2/jump.txt"));
@@ -87,6 +89,7 @@ public class GameScreen implements Screen {
         bomb = new Texture(Gdx.files.internal("Images/bomb.png"));
         drone=new Texture(Gdx.files.internal("Images/drone.png"));
         game_over = new Texture(Gdx.files.internal("Images/game_over.png"));
+        bubble=new Texture(Gdx.files.internal("Images/bubble.png"));
         backgrounds = new Texture[]{bg1, bg3, bg2};
         gameScreen.pref=Gdx.app.getPreferences("game preferences");
     }
@@ -111,39 +114,40 @@ public class GameScreen implements Screen {
             font.draw(batch, "Score : ", cur_pos + 430, 650);
             str = Integer.toString(point);
             score.draw(batch, str, cur_pos + 550, 650);
-            //System.out.println(timePassed);
             if (timePassed > 3 * x && timePassed < 3 * x + 0.1) {
                 bomb_pos = cur_pos + 450;
                 x++;
             }
-            /*if (timePassed > 5 * x && timePassed < 5 * x + 0.1) {
-                drone_pos = cur_pos + 500;
-                x++;
-            }*/
+
             if (timePassed > 5 * y && timePassed < 5 * y + 0.1) {
                 drone_pos = cur_pos + 400;
                 y++;
             }
 
-            //jombie_pos--;
-            // batch.draw((TextureRegion) jombieAnimation.getKeyFrame(timePassed,true),jombi
-            // e_pos,position_y);
             batch.draw(bomb, bomb_pos, position_y + 85, 60, 30);
             batch.draw(drone,drone_pos,position_y+85+170,120,50);
-            //System.out.println(drone_i.y-player_i.y);
-            if (player_i.intersects(bomb_i)) {
-            /*System.out.println(player_i.x-bomb_i.x);
-            System.out.println("Finished!!");*/
-                is_game_over = true;
-                //System.out.println("Finished!!!");
-                //System.out.println(player_i.y - bomb_i.y);
+            if(bubble_activated)
+            {
+                batch.draw(bubble,cur_pos-460,bubble_pos_y,200,200);
+                bubble_time++;
             }
-            if (player_i.intersects(drone_i)) {
-            /*System.out.println(player_i.x-bomb_i.x);
-            System.out.println("Finished!!");*/
+            if(bubble_time>=100)
+            {
+                bubble_time=0;
+                bubble_activated=false;
+            }
+            if (player_i.intersects(bomb_i) && bubble_activated==false) {
                 is_game_over = true;
-                //System.out.println("Finished!!!");
-                //System.out.println(player_i.y - bomb_i.y);
+            }
+            if (player_i.intersects(drone_i) && bubble_activated==false) {
+                is_game_over = true;
+            }
+            if(Math.abs(drone_i.x-bomb_i.x)<=100)
+            {
+                if(Gdx.input.isKeyPressed(Input.Keys.C))
+                {
+                    bubble_activated=true;
+                }
             }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 point += 1;
@@ -155,11 +159,10 @@ public class GameScreen implements Screen {
                 player_i.y = (int) position_y + 95+50;
                 drone_i.x=(int)drone_pos;
                 drone_i.y=(int)position_y+85+170;
+                bubble_pos_y=position_y+70+50;
                 jumpAnimation.setFrameDuration(0.1f);
-            } else if (Gdx.input.isKeyPressed(Input.Keys.B)) {
-                jombie_pos++;
-                batch.draw((TextureRegion) punchAnimation.getKeyFrame(timePassed, true), cur_pos - 550, position_y);
-            } else {
+            }
+            else {
                 point += 1;
                 cur_pos = position_x + timePassed * 350;
                 batch.draw((TextureRegion) runAnimation.getKeyFrame(timePassed, true), cur_pos - 550, position_y);
@@ -169,6 +172,7 @@ public class GameScreen implements Screen {
                 player_i.y = (int) position_y + 95;
                 drone_i.x=(int)drone_pos;
                 drone_i.y=(int)position_y+85+170;
+                bubble_pos_y=position_y+70;
             }
         }
         else
@@ -179,14 +183,11 @@ public class GameScreen implements Screen {
                 gameScreen.pref.flush();
             }
             gameScreen.high_score=gameScreen.pref.getInteger("High score");
-            //System.out.println(gameScreen.high_score);
             batch.draw(game_over,cur_pos-280,300,600,400);
             score.draw(batch,"Score: "+str,cur_pos-80,330);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            //dispose();
             gameScreen.setScreen(new MainMenuScreen(gameScreen));
-            //dispose();
         }
         if (timePassed < 3.0f) {
             note.draw(batch, "*press esc to return Home Menu", cur_pos - 270, 70);
@@ -226,5 +227,6 @@ public class GameScreen implements Screen {
         font.dispose();
         bomb.dispose();
         drone.dispose();
+        bubble.dispose();
     }
 }

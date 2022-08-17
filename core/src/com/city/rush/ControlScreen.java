@@ -46,7 +46,8 @@ public class ControlScreen implements Screen {
         batch.begin();
         timePassed+=Gdx.graphics.getDeltaTime();
         batch.draw(texture,-30, 30, 1700, 750);
-        font2.draw(batch,"# Press A to Jump",560,370);
+        font2.draw(batch,"# Press A to Jump",500,430);
+        font2.draw(batch,"# Press C to activate bubble",500,330);
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
         {
             control.setScreen(new MainMenuScreen(control));
