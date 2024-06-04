@@ -7,7 +7,9 @@ City Rush is a cross-platform Java game developed using the libGDX game developm
 
 ## Game Overview
 
-City Rush is an exciting running game where the player navigates through a cityscape, avoiding obstacles and collecting points to achieve the highest score possible. Players are challenged to break the high scores and reaching milestones
+City Rush is an exciting running game where players dash through a lively cityscape, avoiding obstacles and gathering points to achieve the highest scores. The game pushes players to beat previous records and reach new milestones, offering a dynamic and engaging experience with every run. Inspired by the excitement of urban adventure.
+
+![High Scores](./screenshots/photo_2024-06-04_14-19-13.jpg)
 
 
 ## Features
@@ -20,5 +22,10 @@ City Rush is an exciting running game where the player navigates through a citys
 ## Controls
 
 ![Controls](./screenshots/photo_2024-06-04_14-19-06.jpg)
+
+
+## About Us
+
+![About us](./screenshots/photo_2024-06-04_14-19-00.jpg)
 
 
